@@ -1,0 +1,90 @@
+MASTER PROMPT — BATANGAS PHOTO BOOTH
+
+Build a simple, responsive web-based photo booth using React, JavaScript, HTML5 Canvas, PHP and MySQL for XAMPP.
+
+USE THE SUPPLIED DESIGN EXACTLY AS THE VISUAL REFERENCE.
+
+The artwork is 2048 × 2048 px. The large central photo area is NOT a normal rectangle. It has a torn/jagged paper border. The user's captured photograph must be clipped to that same irregular/jagged shape, not displayed as a square or simple rectangle.
+
+CORE WORKFLOW:
+1. User clicks TAKE PHOTO.
+2. Browser requests camera permission.
+3. Camera opens.
+4. Automatically count down 3, 2, 1, SMILE!
+5. Automatically capture the photo.
+6. Immediately import the captured photo into the jagged/torn photo opening.
+7. Do NOT show a USE PHOTO confirmation.
+8. Stop the camera after capture.
+9. User can edit, retake, save, download or delete.
+
+CANVA/TEMPLATE REQUIREMENT:
+- Master size: exactly 2048 × 2048 px.
+- Preserve the supplied university branding, PHOTO BOOTH title, vines, garden, butterflies, flowers and scenery.
+- The photo opening must follow the torn-paper/jagged outline in the supplied design.
+- Keep the torn-paper border visible above the photo.
+- Do not turn the photo area into a square.
+- Use an image mask/alpha mask for the irregular opening.
+- Render the captured photo first, clipped by the jagged mask.
+- Render the transparent frame/decorations above it.
+
+TECH STACK:
+- React + Vite
+- JavaScript
+- HTML5 Canvas
+- PHP
+- MySQL
+- XAMPP Apache + MySQL
+
+DATABASE ARCHITECTURE:
+The database must live in XAMPP/MySQL, not inside VS Code.
+VS Code contains only the React/PHP source code.
+Use phpMyAdmin to import api/db.sql.
+PHP connects to MySQL through api/config.php.
+Store final PNG files in api/uploads/ and store their metadata in MySQL.
+
+RESPONSIVE:
+- Desktop: large square preview + compact controls.
+- Tablet: stacked layout as needed.
+- Mobile: full-width preview and touch-friendly controls.
+- Never distort the 1:1 template.
+- Internal rendering remains exactly 2048 × 2048.
+
+EDITING:
+- Zoom
+- Rotation
+- Brightness
+- Contrast
+- Saturation
+- Horizontal flip
+- Reset
+
+SAVE:
+- Export exactly 2048 × 2048 PNG.
+- Download locally.
+- SAVE can send the finished PNG to PHP.
+- PHP saves it in api/uploads/.
+- MySQL records filename, original filename and timestamp.
+
+DELETE:
+- Delete current photo from editor.
+- Delete saved photo from gallery.
+- PHP removes the stored file and MySQL row.
+
+UPLOAD:
+- Allow local image upload as camera fallback.
+- Automatically import it into the same jagged photo mask.
+
+PRIVACY:
+- Camera images remain client-side until SAVE is clicked.
+- Do not automatically upload camera photos.
+
+KEEP THE UI SIMPLE.
+Main buttons:
+TAKE PHOTO / RETAKE PHOTO
+UPLOAD PHOTO
+SAVE
+DOWNLOAD
+DELETE
+VIEW SAVED PHOTOS
+
+The visual focus must remain on the supplied Canva design.

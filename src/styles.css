@@ -1,0 +1,1578 @@
+/* =========================================================
+   BATANGAS PHOTO BOOTH — theme
+   Inspired by the template artwork: sky blue, leaf green,
+   cream torn paper, chunky rounded display type.
+   ========================================================= */
+
+:root {
+  --font-display: "Baloo 2", "Nunito", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  --green-900: #1d5c31;
+  --green-700: #2f8f43;
+  --green-600: #3ba055;
+  --green-500: #4cb45f;
+  --green-300: #8fd08a;
+
+  --indigo-800: #2c2c74;
+  --indigo-600: #3d3d9e;
+
+  --teal-700: #1f6e88;
+  --sky-100: #eaf7fd;
+
+  --paper: #fffcf2;
+  --paper-2: #fdf6e3;
+  --paper-line: #ecdfc0;
+  --tan: #d9cba8;
+
+  --ink: #23382a;
+  --ink-soft: #5c7261;
+
+  --red-500: #e2574c;
+  --red-700: #c0392b;
+
+  --shadow-card: 0 18px 40px rgba(38, 92, 52, 0.18);
+  --shadow-soft: 0 8px 18px rgba(38, 92, 52, 0.14);
+}
+
+/* ---------------------------------------------------------
+   Base
+   --------------------------------------------------------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /*
+   * Mobile: never let the page itself pan-zoom. Pinch inside
+   * .preview-wrap still works because it uses touch-action: none
+   * plus pointer gestures handled by the app. Desktop ctrl+wheel
+   * and zoom keys are blocked by lib/zoom.js.
+   */
+  touch-action: pan-x pan-y;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background: #cfe9c9;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(26px, 4vw, 40px);
+  letter-spacing: 0.01em;
+  color: var(--green-900);
+  margin: 4px 0 0;
+  text-shadow: 0 2px 0 #fff, 0 8px 18px rgba(29, 92, 49, 0.22);
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  h1 {
+    background: linear-gradient(180deg, #3f9dd8 0%, #2f8f43 85%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 2px 0 rgba(255, 255, 255, 0.9))
+      drop-shadow(0 8px 16px rgba(29, 92, 49, 0.25));
+  }
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: var(--green-900);
+}
+
+p {
+  line-height: 1.5;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--teal-700);
+}
+
+/* Shared sky-to-grass backdrop. */
+.app-shell,
+.gallery-page {
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 12% -4%, rgba(255, 255, 255, 0.85), transparent 42%),
+    radial-gradient(circle at 92% 6%, rgba(150, 205, 240, 0.5), transparent 46%),
+    radial-gradient(circle at 4% 96%, rgba(126, 182, 96, 0.38), transparent 50%),
+    radial-gradient(circle at 96% 92%, rgba(96, 164, 74, 0.32), transparent 56%),
+    linear-gradient(180deg, #c4e8f8 0%, #e7f5ea 46%, #d3ecc3 100%);
+  background-attachment: fixed;
+}
+
+/* The booth fills the viewport height exactly; the stage inside
+   only scrolls if the window is really short. */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------
+   Buttons
+   --------------------------------------------------------- */
+
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 22px;
+  cursor: pointer;
+  color: var(--ink);
+  background: var(--paper);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+}
+
+button svg,
+.button svg {
+  flex: none;
+}
+
+button.primary,
+.button.primary {
+  color: #fff;
+  background: linear-gradient(180deg, #57b95d, #2f8f43);
+  box-shadow: 0 5px 0 #1f6b31, 0 10px 18px rgba(31, 107, 49, 0.28);
+}
+
+button.primary:hover:not(:disabled),
+.button.primary:hover {
+  filter: brightness(1.06);
+}
+
+button.primary:active:not(:disabled),
+.button.primary:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #1f6b31;
+}
+
+button.secondary,
+.button.secondary {
+  color: var(--green-900);
+  background: var(--paper);
+  border: 2px solid var(--paper-line);
+  box-shadow: 0 4px 0 var(--tan);
+}
+
+button.secondary:hover:not(:disabled),
+.button.secondary:hover {
+  background: #fffef8;
+}
+
+button.secondary:active:not(:disabled),
+.button.secondary:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--tan);
+}
+
+button.danger {
+  color: #fff;
+  background: linear-gradient(180deg, #ef7266, #d0402f);
+  box-shadow: 0 5px 0 #9c2b1e, 0 10px 18px rgba(156, 43, 30, 0.25);
+}
+
+button.danger:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 #9c2b1e;
+}
+
+button.small {
+  font-size: 12.5px;
+  padding: 9px 14px;
+}
+
+button.full,
+.button.full {
+  width: 100%;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+  box-shadow: none;
+  transform: none;
+  filter: none;
+}
+
+button:focus-visible,
+.button:focus-visible,
+input[type="range"]:focus-visible {
+  outline: 3px solid rgba(61, 61, 158, 0.55);
+  outline-offset: 2px;
+}
+
+.icon-button {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  padding: 0;
+  color: var(--green-900);
+  background: var(--paper);
+  border: 2px solid var(--paper-line);
+  box-shadow: 0 4px 0 var(--tan);
+}
+
+.icon-button svg {
+  display: block;
+}
+
+.icon-button:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--tan);
+}
+
+/* ---------------------------------------------------------
+   Top bar
+   --------------------------------------------------------- */
+
+.app-shell .topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  flex: 0 0 auto;
+  padding: 18px clamp(16px, 4vw, 44px) 6px;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.topbar-brand {
+  min-width: 0;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: var(--paper);
+  border: 2px solid var(--paper-line);
+  border-radius: 999px;
+  padding: 9px 16px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--green-900);
+  box-shadow: var(--shadow-soft);
+}
+
+.dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #b9c8bd;
+}
+
+.dot.live {
+  background: var(--red-500);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.25);
+    opacity: 0.75;
+  }
+}
+
+/* ---------------------------------------------------------
+   Settings dropdown
+   --------------------------------------------------------- */
+
+.settings {
+  position: relative;
+}
+
+.settings-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: min(92vw, 340px);
+  max-height: min(72vh, 640px);
+  overflow-y: auto;
+  background: var(--paper);
+  border: 2px solid var(--paper-line);
+  border-radius: 22px;
+  box-shadow: var(--shadow-card);
+  padding: 18px;
+  display: grid;
+  gap: 16px;
+  z-index: 40;
+  animation: menuIn 0.18s ease-out;
+}
+
+@keyframes menuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.settings-section {
+  display: grid;
+  gap: 10px;
+}
+
+.settings-section + .settings-section {
+  border-top: 2px dashed var(--paper-line);
+  padding-top: 14px;
+}
+
+.settings-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--green-900);
+}
+
+.settings-head span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-head svg {
+  color: var(--green-700);
+}
+
+.text-button {
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 6px 10px;
+  color: var(--teal-700);
+  font-family: var(--font-display);
+  font-weight: 800;
+  border-radius: 10px;
+}
+
+.text-button:hover {
+  background: rgba(31, 110, 136, 0.1);
+}
+
+.settings-section label {
+  display: grid;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 13px;
+  color: var(--green-900);
+}
+
+.settings-label-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.settings-value {
+  color: var(--teal-700);
+  font-variant-numeric: tabular-nums;
+}
+
+.settings-note {
+  margin: 0;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+
+.settings-section input[type="range"] {
+  display: block;
+  width: 100%;
+  height: 24px;
+  accent-color: var(--green-600);
+  cursor: pointer;
+}
+
+.settings-section input[type="range"]:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.settings-row {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-row button {
+  flex: 1;
+}
+
+.settings-menu .secondary.full {
+  margin-bottom: 8px;
+}
+
+.settings-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.settings-steps li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-steps svg {
+  flex: none;
+  color: var(--green-700);
+}
+
+/* ---------------------------------------------------------
+   Landing / hero
+   --------------------------------------------------------- */
+
+.landing {
+  display: flex;
+  flex-direction: column;
+}
+
+.landing-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(20px, 5vw, 60px);
+  align-items: center;
+  flex: 1 1 auto;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(24px, 6vh, 70px) clamp(16px, 4vw, 44px) clamp(16px, 4vh, 44px);
+}
+
+.landing-copy h1 {
+  font-size: clamp(34px, 6vw, 62px);
+}
+
+.landing-tagline {
+  margin: 14px 0 0;
+  font-size: clamp(15px, 2vw, 19px);
+  font-weight: 600;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+
+.landing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+
+.landing-start {
+  font-size: 17px;
+  padding: 16px 28px;
+}
+
+.landing-art img {
+  display: block;
+  width: 100%;
+  border-radius: 26px;
+  border: 6px solid #fff;
+  box-shadow: var(--shadow-card);
+  transform: rotate(2deg);
+}
+
+.landing-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  max-width: 1180px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 44px) 30px;
+}
+
+.landing-step {
+  background: linear-gradient(180deg, #fffdf6, var(--paper-2));
+  border: 2px solid var(--paper-line);
+  border-radius: 22px;
+  padding: 20px;
+  box-shadow: var(--shadow-soft);
+}
+
+.landing-step-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(180deg, #57b95d, #2f8f43);
+  box-shadow: 0 4px 0 #1f6b31;
+  margin-bottom: 12px;
+}
+
+.landing-step h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 19px;
+  color: var(--green-900);
+}
+
+.landing-step p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------
+   Booth layout
+   --------------------------------------------------------- */
+
+.layout {
+  flex: 1 1 auto;
+  display: flex;
+  overflow: auto;
+  min-height: 0;
+  padding: 4px clamp(16px, 4vw, 44px) 18px;
+}
+
+.booth-card {
+  /*
+   * Mobile: the camera box and the options panel stack in a single
+   * column, with slimmer padding so the live preview stays as big
+   * as possible. The desktop media query below turns this into
+   * the camera-left / options-right split.
+   */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  margin: auto;
+  /* Phones and tablets: stretch to the available width. The
+     viewport-height cap is desktop-only — the stacked mobile
+     layout simply scrolls, so the frame stays as big as possible. */
+  width: min(100%, 720px);
+  background: linear-gradient(180deg, #fffdf6, var(--paper-2));
+  border: 2px solid var(--paper-line);
+  border-radius: 28px;
+  padding: clamp(12px, 3vw, 26px);
+  box-shadow: var(--shadow-card);
+}
+
+/* Left column: the live camera box and its shutter controls. */
+.booth-stage {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Right column: status message and the action buttons, shown as a
+   soft inset panel on every screen size. */
+.booth-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid var(--paper-line);
+  border-radius: 18px;
+  padding: 14px;
+}
+
+.booth-panel .message,
+.booth-panel .error,
+.booth-panel .main-actions {
+  margin-top: 0;
+}
+
+/* ---------------------------------------------------------
+   Preview stage
+   --------------------------------------------------------- */
+
+.preview-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #dff2ff;
+  box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 5px var(--paper-line),
+    var(--shadow-soft);
+  /* Page scrolling stays natural until REPOSITION mode is on. */
+  touch-action: pan-x pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: default;
+}
+
+/* REPOSITION mode: gestures move the photo inside the template. */
+.preview-wrap.placing {
+  touch-action: none;
+  cursor: grab;
+}
+
+.preview-wrap.placing:active {
+  cursor: grabbing;
+}
+
+.final-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink-soft);
+  background: rgba(255, 252, 242, 0.85);
+}
+
+/* ---------------------------------------------------------
+   Live camera inside the torn-paper slot
+   (--slot-* custom properties come from config.js via JSX)
+   --------------------------------------------------------- */
+
+.camera-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  /* Lets the countdown size itself against the camera box width
+     (see .countdown.smile below). */
+  container-type: inline-size;
+}
+
+.camera-slot-mask {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: var(--slot-mask-url);
+  mask-image: var(--slot-mask-url);
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.camera-slot-mask video,
+.camera-slot-mask img {
+  position: absolute;
+  left: var(--slot-x);
+  top: var(--slot-y);
+  width: var(--slot-w);
+  height: var(--slot-h);
+  object-fit: cover;
+  background: #16281c;
+  display: block;
+}
+
+.camera-slot-mask video.mirrored {
+  transform: scaleX(-1);
+}
+
+.countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(84px, 22vmin, 190px);
+  color: #fff;
+  text-shadow: 0 6px 0 rgba(47, 143, 67, 0.65),
+    0 0 46px rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  animation: countPop 0.85s ease-out;
+}
+
+/*
+ * "SMILE!" is about three times wider than a single digit, so it
+ * gets its own size: a fixed share of the camera box width keeps it
+ * inside the frame on every layout. The vmin clamp is the fallback
+ * for browsers without container query units, and the gentler pop
+ * keeps the wide word from clipping while it animates in.
+ */
+.countdown.smile {
+  font-size: clamp(40px, 13vmin, 140px);
+  font-size: clamp(40px, 23cqw, 170px);
+  animation-name: countPopSmile;
+}
+
+@keyframes countPop {
+  0% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.94);
+    opacity: 0.92;
+  }
+}
+
+@keyframes countPopSmile {
+  0% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  25% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.96);
+    opacity: 0.95;
+  }
+}
+
+.camera-note {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  background: rgba(29, 92, 49, 0.82);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  z-index: 5;
+}
+
+.flash-overlay {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  pointer-events: none;
+  z-index: 6;
+  border-radius: inherit;
+  animation: flashFade 0.65s ease-out forwards;
+}
+
+@keyframes flashFade {
+  0% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ---------------------------------------------------------
+   Camera control bar (shutter / flip / cancel)
+   --------------------------------------------------------- */
+
+.camera-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.camera-shutter {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  color: #fff;
+  background: linear-gradient(180deg, #57b95d, #2f8f43);
+  box-shadow: 0 6px 0 #1f6b31, 0 12px 22px rgba(31, 107, 49, 0.35);
+  padding: 0;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.camera-shutter:active:not(:disabled) {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 #1f6b31, 0 6px 12px rgba(31, 107, 49, 0.3);
+}
+
+.camera-shutter:disabled {
+  opacity: 0.55;
+}
+
+.camera-round {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 20px;
+  border: 2px solid var(--paper-line);
+  background: var(--paper);
+  box-shadow: 0 4px 0 var(--tan);
+}
+
+.camera-round:active:not(:disabled) {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--tan);
+}
+
+/* ---------------------------------------------------------
+   Booth extras
+   --------------------------------------------------------- */
+
+.gesture-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.gesture-hint svg {
+  color: var(--green-700);
+}
+
+.message {
+  margin-top: 12px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--green-900);
+}
+
+.error {
+  margin-top: 10px;
+  text-align: center;
+  background: #fdecea;
+  border: 2px dashed #f2b8b3;
+  color: #a4352b;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/*
+ * Action buttons: on phones and tablets they pair up two per row,
+ * and the lead primary (TAKE / RETAKE PHOTO) always takes a full
+ * row as a big thumb-friendly button.
+ */
+.main-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.main-actions > * {
+  flex: 1 1 calc(50% - 5px);
+  min-width: 0;
+}
+
+.main-actions > .primary:first-child {
+  flex-basis: 100%;
+  font-size: 17px;
+  padding: 16px 24px;
+}
+
+/* ---------------------------------------------------------
+   Desktop: big live camera box left, options panel right
+   --------------------------------------------------------- */
+
+@media (min-width: 960px) {
+  .booth-card {
+    /*
+     * Camera left / options right, with the live feed on the big
+     * side (60 / 40). The square preview must also stay inside the
+     * viewport height, so the card width is capped by the window
+     * height as well.
+     */
+    width: min(100%, 1320px, max(620px, calc(160dvh - 400px)));
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    align-items: center;
+    gap: 26px;
+  }
+
+  /* The camera box spans both rows of the card; the options panel
+     and the shutter controls (x / shutter / flip) stack in the
+     right column, the controls under the panel, while the camera
+     is open. On mobile the controls stay right below the camera. */
+  .booth-stage {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .booth-panel {
+    grid-column: 2;
+    grid-row: 1;
+    gap: 14px;
+    border-radius: 22px;
+    padding: 22px;
+  }
+
+  .camera-controls {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .main-actions {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .main-actions > * {
+    width: 100%;
+    flex: 0 0 auto;
+  }
+
+  .main-actions > .primary:first-child {
+    flex-basis: auto;
+  }
+}
+
+.app-shell footer {
+  flex: 0 0 auto;
+  text-align: center;
+  padding: 4px 16px 16px;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------------------------------------------------------
+   Saved photos gallery
+   --------------------------------------------------------- */
+
+.gallery-page {
+  padding: clamp(18px, 4vw, 40px);
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.gallery-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 22px;
+}
+
+.gallery-header h1 {
+  margin-top: 4px;
+}
+
+.gallery-subtitle {
+  margin: 6px 0 0;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.saved-gallery {
+  background: linear-gradient(180deg, #fffdf6, var(--paper-2));
+  border: 2px solid var(--paper-line);
+  border-radius: 28px;
+  padding: clamp(16px, 3vw, 26px);
+  box-shadow: var(--shadow-card);
+}
+
+.gallery-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+
+.gallery-toolbar strong {
+  color: var(--green-900);
+  font-family: var(--font-display);
+  font-size: 18px;
+}
+
+.gallery-toolbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.empty-gallery {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-soft);
+}
+
+.empty-icon {
+  color: var(--green-600);
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.empty-gallery h2 {
+  margin: 6px 0;
+}
+
+.saved-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.saved-card {
+  background: var(--paper);
+  border: 2px solid var(--paper-line);
+  border-radius: 20px;
+  padding: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(38, 92, 52, 0.1);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.saved-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+
+.saved-card.selected {
+  border-color: var(--green-600);
+  box-shadow: 0 0 0 4px rgba(76, 180, 95, 0.28), var(--shadow-soft);
+}
+
+.saved-image-wrap {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #eef3ea;
+}
+
+.saved-image-wrap img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.selection-check {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: 2px solid var(--tan);
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.saved-card.selected .selection-check {
+  background: var(--green-600);
+  border-color: #fff;
+  box-shadow: 0 4px 10px rgba(46, 139, 69, 0.4);
+}
+
+.saved-number {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  background: rgba(29, 92, 49, 0.82);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.saved-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.saved-card-actions button {
+  flex: 1;
+}
+
+/* ---------------------------------------------------------
+   Live screen (second display, ?screen=live)
+   --------------------------------------------------------- */
+
+.live-screen {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(10px, 1.6vw, 20px);
+  gap: clamp(8px, 1.2vw, 14px);
+  /* Template artwork as the page background, softened by the
+     sky-to-grass wash on top. */
+  background:
+    radial-gradient(circle at 12% -4%, rgba(255, 255, 255, 0.7), transparent 42%),
+    radial-gradient(circle at 92% 6%, rgba(150, 205, 240, 0.35), transparent 46%),
+    linear-gradient(
+      180deg,
+      rgba(196, 232, 248, 0.9) 0%,
+      rgba(231, 245, 234, 0.86) 46%,
+      rgba(211, 236, 195, 0.9) 100%
+    ),
+    url("/template.webp") center / cover no-repeat;
+}
+
+.live-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.live-brand h1 {
+  margin: 0;
+  font-size: clamp(26px, 3.6vw, 42px);
+}
+
+.live-badge {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  font-size: 13px;
+  color: #fff;
+  background: linear-gradient(180deg, #ef7266, #d0402f);
+  padding: 10px 18px;
+  border-radius: 999px;
+  box-shadow: 0 5px 0 #9c2b1e;
+}
+
+.live-stage {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+/* The template board: frame artwork with the live camera
+   masked into the torn-paper slot. Sized to fill the display:
+   height-bound on landscape screens, width-bound on phones. */
+.live-board {
+  position: relative;
+  width: min(96vw, calc(100dvh - 168px));
+  max-width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #fff;
+  border: 6px solid #fff;
+  box-shadow: var(--shadow-card);
+  /* Lets the countdown size itself against the board width
+     (see .live-countdown.smile below). */
+  container-type: inline-size;
+}
+
+.live-board-art {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.live-countdown {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(120px, 32vmin, 340px);
+  color: #fff;
+  text-shadow: 0 10px 0 rgba(47, 143, 67, 0.6),
+    0 0 80px rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+  animation: countPop 0.85s ease-out;
+}
+
+/* Same treatment as the booth: the wide word gets its own width-
+   relative size so it always stays inside the board. */
+.live-countdown.smile {
+  font-size: clamp(56px, 17vmin, 220px);
+  font-size: clamp(56px, 20cqw, 260px);
+  animation-name: countPopSmile;
+}
+
+.live-note {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(13, 26, 18, 0.78);
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 14px;
+  font-weight: 700;
+  max-width: 70%;
+  text-align: center;
+  z-index: 3;
+}
+
+/* Idle: template on show, waiting for a session. */
+.live-board-idle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.live-board-idle .live-board-art {
+  opacity: 0.55;
+}
+
+.live-idle {
+  position: relative;
+  z-index: 2;
+  width: min(84%, 430px);
+  text-align: center;
+  color: var(--green-900);
+  background: rgba(255, 252, 242, 0.94);
+  border: 2px solid var(--paper-line);
+  border-radius: 24px;
+  padding: clamp(20px, 4vw, 36px);
+  box-shadow: var(--shadow-card);
+}
+
+.live-idle-icon {
+  color: var(--green-700);
+  display: flex;
+  justify-content: center;
+  animation: bob 2.6s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.live-idle h2 {
+  font-size: clamp(20px, 2.6vw, 30px);
+  margin: 10px 0 6px;
+}
+
+.live-idle p {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: clamp(13px, 1.6vw, 16px);
+  font-weight: 600;
+}
+
+/* Finished composite after a capture. */
+.live-photo-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.live-photo {
+  max-width: min(100%, 1200px);
+  max-height: calc(100dvh - 168px);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+  animation: photoIn 0.45s ease-out;
+}
+
+@keyframes photoIn {
+  from {
+    transform: scale(0.92) translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.live-flash {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  z-index: 60;
+  pointer-events: none;
+  animation: flashFade 0.7s ease-out forwards;
+}
+
+.live-footer {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(14px, 1.8vw, 18px);
+  color: var(--green-900);
+}
+
+/* ---------------------------------------------------------
+   Responsive
+   --------------------------------------------------------- */
+
+@media (max-width: 860px) {
+  .landing-hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .landing-tagline {
+    margin-inline: auto;
+  }
+
+  .landing-actions {
+    justify-content: center;
+  }
+
+  .landing-art {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .landing-steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell .topbar {
+    padding: 18px 16px 6px;
+  }
+
+  .icon-button {
+    width: 42px;
+    height: 42px;
+  }
+
+  .layout {
+    padding: 6px 8px 24px;
+  }
+
+  .booth-card,
+  .gallery-page .saved-gallery {
+    border-radius: 22px;
+  }
+
+  /* Slimmer card padding so the frame takes almost the full width. */
+  .booth-card {
+    padding: 10px;
+  }
+
+  .camera-shutter {
+    width: 68px;
+    height: 68px;
+  }
+
+  .camera-round {
+    width: 48px;
+    height: 48px;
+  }
+
+  .main-actions {
+    gap: 10px;
+  }
+
+  .main-actions button,
+  .main-actions .button {
+    flex: 1 1 44%;
+    padding: 12px 14px;
+    font-size: 13.5px;
+  }
+
+  /* Saved photos on phones: stacked header with a full-width back
+     button, a toolbar that wraps into as many columns as fit, and
+     stacked card buttons so no label ever gets clipped. */
+  .gallery-page {
+    padding: 14px 10px 20px;
+  }
+
+  .gallery-header {
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .gallery-header > div {
+    min-width: 0;
+  }
+
+  .gallery-header .primary {
+    width: 100%;
+  }
+
+  .saved-gallery {
+    padding: 14px;
+  }
+
+  .gallery-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .gallery-toolbar-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+  }
+
+  .gallery-toolbar-actions button {
+    width: 100%;
+    padding: 12px 8px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .saved-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .saved-card-actions {
+    flex-direction: column;
+  }
+
+  .saved-card-actions button {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------
+   Phone camera session (camera open) — the header stays put,
+   the camera takes the room that is left, and in landscape the
+   controls line up on the right like a camera app.
+   --------------------------------------------------------- */
+
+@media (max-width: 560px) {
+  /* Portrait: trim every padding around the camera. */
+  .app-shell.session .layout {
+    padding: 4px 6px 10px;
+  }
+
+  .app-shell.session .booth-card {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 960px) and (orientation: landscape) and (max-height: 560px) {
+  /* Landscape phone, shooting: header on top, squared camera bound
+     by the screen height, controls on the right. */
+  .app-shell.session .topbar {
+    padding: 8px 12px 2px;
+  }
+
+  .app-shell.session .topbar h1 {
+    font-size: 22px;
+  }
+
+  .app-shell.session .layout {
+    padding: 2px 8px 8px;
+  }
+
+  .app-shell.session .booth-card {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+  }
+
+  .app-shell.session .booth-stage {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+  }
+
+  .app-shell.session .preview-wrap {
+    width: min(100%, calc(100dvh - 104px));
+    margin: 0 auto;
+  }
+
+  .app-shell.session .camera-controls {
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: column;
+    align-self: center;
+    gap: 16px;
+    padding: 0 2px;
+  }
+
+  .app-shell.session .camera-shutter {
+    width: 62px;
+    height: 62px;
+  }
+
+  /* While shooting there is no room to spare for the action panel;
+     it returns as soon as the camera closes. */
+  .app-shell.session .booth-panel {
+    display: none;
+  }
+
+  /* Review and edit screens in landscape: keep the squared preview
+     tied to the screen height instead of the full width. */
+  .app-shell:not(.session) .preview-wrap {
+    width: min(100%, calc(100dvh - 160px));
+    margin-inline: auto;
+  }
+}

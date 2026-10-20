@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#2f8f43" />
+    <title>Batangas Photo Booth</title>
+    <!-- Booth artwork (a few hundred KB each after tools/optimize-images.mjs).
+         Preloading starts the downloads alongside the JS bundle so the
+         first screen paints immediately. Relative paths keep the build
+         working from any subfolder (e.g. http://localhost/photobooth/). -->
+    <link rel="preload" as="image" type="image/webp" href="./template.webp" />
+    <link rel="preload" as="image" type="image/webp" href="./frame.webp" />
+    <link rel="preload" as="image" type="image/webp" href="./photo-mask.webp" />
+    <!-- Rounded, friendly display type to match the template artwork.
+         If offline, the CSS font stack falls back to system fonts. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

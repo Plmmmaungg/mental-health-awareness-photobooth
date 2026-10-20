@@ -1,0 +1,19 @@
+START HERE
+==========
+
+1. Start XAMPP MySQL (port 3307).
+2. Import database/db.sql into http://localhost/phpmyadmin/
+3. Open a terminal in backend/ and run:
+       npm install
+       npm start
+4. Open http://localhost:5000/api/health
+5. Open a second terminal in the project root and run:
+       npm install
+       npm run dev
+6. Open the Vite URL.
+
+For the full XAMPP upload/deployment instructions, read:
+UPLOAD_GUIDE.md
+
+The separate PDF guide is included outside the ZIP as:
+Batangas-Photobooth-Upload-Guide.pdf
